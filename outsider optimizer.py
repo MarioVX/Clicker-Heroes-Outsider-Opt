@@ -250,7 +250,7 @@ def z_est(O,c,AS):
     z=105
     fz=zhelp(z,O,c,T)
     if fz>0:
-        return "Error: c too small."
+        raise ValueError("Error: c too small.")
     elif fz==0:
         return z
     while fz<0:
@@ -279,14 +279,12 @@ def zranges(s,c):
         o_min=tuple(list(o[:-1])+[0])
         o_max=tuple(list(o[:3])+[LfA(o[-1])[0],]*5+[o[-1],])
         d[o]=(z_est(o_min,c,AS),z_est(o_max,c,AS))
-    print()
     return d
 
 def lrange(i,zr,a):
     lmaxa=LfA(a)[0]
     if i not in range(3,8):
-        print("Error: invalid outsider index call")
-        return None
+        raise ValueError("Error: invalid outsider index call")
     if i==3:
         lmax=min(lmaxa,math.ceil(10*((8+math.floor(zr[1]/500))/100-1)))
         return tuple(range(lmax+1))
@@ -364,7 +362,7 @@ def eval_time(d):
         z=d[o][0]
         B=o[3]
         borders=[0,]+list(range(500*(93+10*B),math.floor(z/500)*500+500,500))+[z,]
-        time=sum((MpZ(b,borders[x])-1)*(borders[x+1]-borders[x]) for x in range(len(borders)-1))
+        time=sum((MpZ(B,borders[x])-1)*(borders[x+1]-borders[x]) for x in range(len(borders)-1))
         dn[o]=(z,d[o][1],time)
     return dn
 
@@ -412,26 +410,26 @@ print("Thank you for your input. Calculations will now commence. Depending on yo
 c_prev = const_est(O_prev, z_prev)
 x = all_init(AS_now,spread_setting)
 print(str(len(x))+" initialized combinations.")
-#x = zranges(x, c_prev)
-#print("Zone range annotation complete.")
-#x = all_comp(x)
-#print(str(len(x))+" completed combinations.")
-#x = eval_zones(x, c_prev)
-#print("Zone evaluation complete.")
-#x = eval_ASgain(x, c_prev, AS_now)
-#print("Ancient Souls gain evaluation complete.")
-#x = eval_time(x)
-#print("Time evaluation complete.")
-#x = eval_efficiency(x)
-#print("Efficiency evaluation complete.")
-#opt = select_best(x)
-#print("Finished comparing "+str(len(x))+" possible Outsider allocations.")
-#print("This one is predicted to perform best:")
-#print("(Xyl, Chor, Pony, Borb, Rhag, K'Ari, Orph, Sen, Phan)")
-#print(str(opt[0]))
-#print("predicted highest zone to be reached: "+str(opt[1][0]))
-#print("predicted ancient souls to be gained: "+str(opt[1][1]))
-#print("efficiency score: "+str(opt[1][3]))
-#print("Process completed. Assign Outsider levels and good luck with your next Transcension!")
-#print("Remember to save your outsider configuration before transcending next time so you can input it again, since this script cannot store it on your hard drive for the next time you run it.")
+x = zranges(x, c_prev)
+print("Zone range annotation complete.")
+x = all_comp(x)
+print(str(len(x))+" completed combinations.")
+x = eval_zones(x, c_prev)
+print("Zone evaluation complete.")
+x = eval_ASgain(x, c_prev, AS_now)
+print("Ancient Souls gain evaluation complete.")
+x = eval_time(x)
+print("Time evaluation complete.")
+x = eval_efficiency(x)
+print("Efficiency evaluation complete.")
+opt = select_best(x)
+print("Finished comparing "+str(len(x))+" possible Outsider allocations.")
+print("This one is predicted to perform best:")
+print("(Xyl, Chor, Pony, Borb, Rhag, K'Ari, Orph, Sen, Phan)")
+print(str(opt[0]))
+print("predicted highest zone to be reached: "+str(opt[1][0]))
+print("predicted ancient souls to be gained: "+str(opt[1][1]))
+print("efficiency score: "+str(opt[1][3]))
+print("Process completed. Assign Outsider levels and good luck with your next Transcension!")
+print("Remember to save your outsider configuration before transcending next time so you can input it again, since this script cannot store it on your hard drive for the next time you run it.")
 input("Enter anything to close.")
